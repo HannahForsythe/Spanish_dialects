@@ -2,7 +2,7 @@ Project proposal for Data Incubator
 ================
 
 available at: <https://github.com/HannahForsythe/span_dialects> author:
-Hannah Forsythe date: 12-April-2020 description: Exploratory analysis of
+Hannah Forsythe date: 13-April-2020 description: Exploratory analysis of
 dialectal differences across Spanish. Figure 1 explores the utility of
 two potential features for characterizing dialectal differences: (i)
 overall rates subject pronoun use, and (ii) rates of different types of
@@ -25,8 +25,6 @@ features).
 ####################
 library(dplyr)
 ```
-
-    ## Warning: package 'dplyr' was built under R version 3.5.2
 
     ## 
     ## Attaching package: 'dplyr'
@@ -105,13 +103,15 @@ etc.) can be easily grouped together. I have used the accompanying free
 software called CLAN (<http://dali.talkbank.org/clan/>) to put the data
 into csv format, with one line per utterance.
 
-The code below cleans the data and extract the following variables: file
-- name of the transcript line - each utterance appears on a separate
-line participant - what kind of person is speaking (parent,
-investigator, etc.) For now, we only include adults; no children.
-speaker - the speaker’s unique ID environment - the utterance: all the
-words that were said and the part-of-speech tagger. dyad - dialect - For
-now, this includes Mexican, Argentinian, Spain, and Paraguayan Spanish.
+The code below cleans the data and extract the following variables: a)
+file: name of the transcript b) line: each utterance appears on a
+separate line c) participant: what kind of person is speaking (parent,
+investigator, etc.) For now, we only include adults; no children. d)
+speaker: the speaker’s unique ID e) environment: the utterance,
+including all the words that were said and the part-of-speech tags f)
+dyad: this variable is used to identify some mother-child pairs g)
+dialect: For now, this includes Mexican, Argentinian, Spain, and
+Paraguayan Spanish.
 
 ``` r
 ################
@@ -122,40 +122,13 @@ now, this includes Mexican, Argentinian, Spain, and Paraguayan Spanish.
 #This data is private, pending anonymization
 
 schmill <- read_delim("SchmittMiller/allSchmittMiller-all.csv", '\t', col_names=c("file", "language", "corpus", "participant", "age", "sex", "empty1", "empty2", "role", "empty3", "empty4", "line", "token", "environment"))
-```
 
-    ## Parsed with column specification:
-    ## cols(
-    ##   file = col_character(),
-    ##   language = col_character(),
-    ##   corpus = col_character(),
-    ##   participant = col_character(),
-    ##   age = col_character(),
-    ##   sex = col_character(),
-    ##   empty1 = col_character(),
-    ##   empty2 = col_character(),
-    ##   role = col_character(),
-    ##   empty3 = col_character(),
-    ##   empty4 = col_character(),
-    ##   line = col_double(),
-    ##   token = col_character(),
-    ##   environment = col_character()
-    ## )
-
-``` r
 #remove duplicate rows
 schmill <- distinct(schmill)
 
 #check participant codes
 levels(as.factor(schmill$participant))
-```
 
-    ##  [1] "*CHI:"  "*JGAV:" "*LAD:"  "ADU"    "ALB"    "ALE"    "CHI"   
-    ##  [8] "CLD"    "CLD2"   "CLD3"   "ERI"    "FAT"    "FRI"    "JGAV"  
-    ## [15] "LAD"    "MAE"    "MOM"    "MOT"    "OTH"    "OTH1"   "SIS"   
-    ## [22] "SP01"   "TEA"    "WOM"
-
-``` r
 #As with the other files, select only adult speech
 CDMX1 <- schmill %>% filter(participant %in% c("ADU", "FAT", "FRI", "LAD", "MOM", "MOT", "OTH", "OTH1", "SIS", "SP01", "TEA", "WOM")) %>% 
   select(file, line, participant, environment)
@@ -255,11 +228,7 @@ Spain1 <- diezitza %>% filter(participant %in% c("MOT", "INV") & tier %in% "%mor
   linaza <-read.csv("Linaza/Linaza_all.csv")
   #check participant codes
   levels(linaza$participant)
-```
-
-    ## [1] "ADU" "ANA" "CAC" "CHI" "CUI" "JAI" "JOH" "MAD" "PAD"
-
-``` r
+  
   #As with the other files, select only adult speech main lines (no comments or grammatical codes)
   Spain2 <- linaza %>% filter(participant %in% c("ADU", "ANA", "CUI", "MAD", "PAD") & tier %in% "%mor:") %>% 
     select(file, line, participant, environment)
@@ -280,11 +249,7 @@ Spain1 <- diezitza %>% filter(participant %in% c("MOT", "INV") & tier %in% "%mor
   
   #check participant codes
   levels(lucia$participant)
-```
-
-    ## [1] "CHI" "FAT" "MOT"
-
-``` r
+  
   #As with the other files, select only adult speech main lines (no comments or grammatical codes)
   lucia <- lucia %>% filter(participant %in% c("FAT", "MOT") & tier %in% "%mor:") %>% 
     select(file, line, participant, environment)
@@ -296,49 +261,7 @@ Spain1 <- diezitza %>% filter(participant %in% c("MOT", "INV") & tier %in% "%mor
   #####Juan
   #Juan has 2 files, neither with headers. read them in with headers and combine
   juan1 <- read_delim("OreaPine/Juan/OreaPine-Juan011021_020207.csv", ',', col_names=c("file", "language", "corpus", "participant", "age", "sex", "empty1", "empty2", "role", "empty3", "empty4", "line", "token", "environment"))
-```
-
-    ## Parsed with column specification:
-    ## cols(
-    ##   file = col_character(),
-    ##   language = col_character(),
-    ##   corpus = col_character(),
-    ##   participant = col_character(),
-    ##   age = col_character(),
-    ##   sex = col_character(),
-    ##   empty1 = col_character(),
-    ##   empty2 = col_character(),
-    ##   role = col_character(),
-    ##   empty3 = col_character(),
-    ##   empty4 = col_character(),
-    ##   line = col_double(),
-    ##   token = col_character(),
-    ##   environment = col_character()
-    ## )
-
-``` r
   juan2 <- read_delim("OreaPine/Juan/OreaPine-Juan020211_020529b.csv", ',', col_names=c("file", "language", "corpus", "participant", "age", "sex", "empty1", "empty2", "role", "empty3", "empty4", "line", "token", "environment"))
-```
-
-    ## Parsed with column specification:
-    ## cols(
-    ##   file = col_character(),
-    ##   language = col_character(),
-    ##   corpus = col_character(),
-    ##   participant = col_character(),
-    ##   age = col_character(),
-    ##   sex = col_character(),
-    ##   empty1 = col_character(),
-    ##   empty2 = col_character(),
-    ##   role = col_character(),
-    ##   empty3 = col_character(),
-    ##   empty4 = col_character(),
-    ##   line = col_double(),
-    ##   token = col_character(),
-    ##   environment = col_character()
-    ## )
-
-``` r
   juan12 <- rbind(juan1, juan2)
   
   #Juan files have duplicate rows; remove them
@@ -346,11 +269,7 @@ Spain1 <- diezitza %>% filter(participant %in% c("MOT", "INV") & tier %in% "%mor
   
   #check participant codes
   levels(as.factor(juan12$participant))
-```
-
-    ## [1] "AB2" "ABU" "CHI" "FAT" "MOT" "TI1" "TI2" "TI3" "VEC"
-
-``` r
+  
   #As with the other files, select only adult speech
   juan <- juan12 %>% filter(participant %in% c("FAT", "MOT", "AB2", "ABU", "TI1", "TI2", "TI3", "VEC")) %>% 
     select(file, line, participant, environment)
@@ -370,42 +289,13 @@ Spain1 <- diezitza %>% filter(participant %in% c("MOT", "INV") & tier %in% "%mor
 #https://childes.talkbank.org/access/Spanish/FernAguado.html
   
   fernaguado <-read_delim("FernAguado/allFernAguado.csv", '\t', col_names=c("file", "language", "corpus", "participant", "age", "sex", "empty1", "empty2", "role", "empty3", "empty4", "line", "token", "environment"))
-```
-
-    ## Parsed with column specification:
-    ## cols(
-    ##   file = col_character(),
-    ##   language = col_character(),
-    ##   corpus = col_character(),
-    ##   participant = col_character(),
-    ##   age = col_character(),
-    ##   sex = col_character(),
-    ##   empty1 = col_character(),
-    ##   empty2 = col_character(),
-    ##   role = col_character(),
-    ##   empty3 = col_character(),
-    ##   empty4 = col_character(),
-    ##   line = col_double(),
-    ##   token = col_character(),
-    ##   environment = col_character()
-    ## )
-
-``` r
+  
   #fernaguado files have duplicate rows; remove them
   fernaguado <- distinct(fernaguado)
   
   #check participant codes
   levels(as.factor(fernaguado$participant))
-```
-
-    ##  [1] "AIN" "ALJ" "ALX" "AMA" "ANA" "AND" "ANM" "ANR" "ARI" "ASC" "AST"
-    ## [12] "AUD" "BEA" "BRO" "CAR" "CHI" "CRI" "DAN" "DIH" "DIU" "EID" "ENE"
-    ## [23] "ERI" "FAT" "FER" "GAR" "GOR" "GUI" "IGN" "INA" "ING" "INV" "IOS"
-    ## [34] "IRA" "ITX" "IZA" "IZC" "JAA" "JAI" "JAJ" "JGA" "JUL" "JUN" "LAR"
-    ## [45] "MAC" "MAR" "MIG" "MOT" "MTO" "NAR" "NAY" "NIC" "NIN" "NOE" "OYA"
-    ## [56] "PEL" "PRI" "RUB" "SAR" "SER" "SIO" "SIS" "UXU" "VIR" "XAB" "YAG"
-
-``` r
+  
   #As with the other files, select only adult speech
   Spain4 <- fernaguado %>% filter(participant %in% c("FAT", "MOT", "INV")) %>% 
     select(file, line, participant, environment)
@@ -433,11 +323,7 @@ remedi <- distinct(remedi)
 
 #check participant codes
 levels(as.factor(remedi$participant))
-```
 
-    ## [1] "ALE" "CHI" "PAD"
-
-``` r
 #As with the other files, select only adult speech
 ArgS2 <- remedi %>% filter(participant %in% c("PAD", "ALE")) %>% 
   select(file, line, participant, environment)
@@ -458,36 +344,11 @@ ArgS2$dialect <- as.factor("Argentinian")
 #Note: missing a lot of accents. Will undercount tú and está.
   
   jacksonthal_mex <- read_delim("JacksonThal/JacksonThal_mex.csv", '\t', col_names=c("file", "language", "corpus", "participant", "age", "sex", "empty1", "empty2", "role", "empty3", "empty4", "line", "token", "environment"))
-```
 
-    ## Parsed with column specification:
-    ## cols(
-    ##   file = col_character(),
-    ##   language = col_character(),
-    ##   corpus = col_character(),
-    ##   participant = col_character(),
-    ##   age = col_character(),
-    ##   sex = col_character(),
-    ##   empty1 = col_character(),
-    ##   empty2 = col_character(),
-    ##   role = col_character(),
-    ##   empty3 = col_character(),
-    ##   empty4 = col_character(),
-    ##   line = col_double(),
-    ##   token = col_character(),
-    ##   environment = col_character()
-    ## )
-
-``` r
   #remove duplicate rows
   jacksonthal_mex <- distinct(jacksonthal_mex)
   #check participant codes
   levels(as.factor(jacksonthal_mex$participant))
-```
-
-    ## [1] "BRO" "CHI" "FAT" "INV" "PAR" "TEA"
-
-``` r
   #As with the other files, select only adult speech
   jtmx <- jacksonthal_mex %>% filter(participant %in% c("FAT", "PAR", "TEA", "INV")) %>% 
     select(file, line, participant, environment)
@@ -631,11 +492,11 @@ The Figure below displays our results:
   pro.plot
 ```
 
-![](Coding_challenge_1_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+![](Coding_challenge_1_files/figure-gfm/asset1-1.png)<!-- -->
 
 ``` r
 #uncomment the following line to save this figure as a pdf
-ggsave("Asset_1-prop_subject_pronouns.pdf", dpi=900, dev='pdf', height=5, width=9, units="in")
+#ggsave("Asset_1-prop_subject_pronouns.pdf", dpi=900, dev='pdf', height=5, width=9, units="in")
 ```
 
 What we learn from this figure:
@@ -667,7 +528,9 @@ estoy, ‘(I) am’, estás ‘(you) are’, etc.) can be easily grouped
 together.
 
 We begin with the highly frequent verbs ser and estar (both meaning ‘to
-be’). Below, we can see that
+be’). First, let’s compare how frequent these verbs are across dialects
+by measuring the each speaker’s average proportion of ser and estar out
+of all verb stems.
 
 ``` r
 #Define verb tags to search for in each line.
@@ -683,7 +546,7 @@ be’). Below, we can see that
   df$ser_count <- str_count(df$environment, ser)
   df$est_count <- str_count(df$environment, est)
 
-  #For speaker, and dialect get the average rate of occurrence of each of these verbs out of all verbs:
+  #For each speaker and dialect, get the average rate of occurrence of each of these verbs out of all verbs:
   #first, eliminate lines without verbs in them.
   verbs <- subset(df, df$verb_count>0)
   #then, divide each of the verb counts by the total verb count, within each speaker/dialect combo
@@ -708,11 +571,11 @@ be’). Below, we can see that
     ylab("")
 ```
 
-![](Coding_challenge_1_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+![](Coding_challenge_1_files/figure-gfm/serestar-1.png)<!-- -->
 
 There is a fair degree of differentiation between dialects. But what if
 we look at the RATIO between these two verbs? Could we get even more
-differntiation? It seems likethe dialects with higher amounts of ‘ser’
+differntiation? It seems like the dialects with higher amounts of ‘ser’
 (Mexican, Spain) have lower amounts of ‘estar’ and vice-versa. This
 suggests that there is a trade-off between these two very
 similar-meaning verbs, with each dialect resolving the competition a
@@ -724,7 +587,7 @@ ratios <- dialect_verbs %>% select(dialect, speaker, ser_prop, est_prop)
   #calculate ratio of estar to ser
   ratios$estar_over_ser <- ratios$est_prop / ratios$ser_prop
 
-#Check: this estar:ser graph gives us a little more separation between dialects than we saw in hifrq.plot
+#Plot the ratio estar:ser
   ggplot(ratios, aes(x=dialect, y=estar_over_ser, color = dialect)) +
     geom_boxplot() +
     ylim(0, 1.8) +
@@ -736,16 +599,43 @@ ratios <- dialect_verbs %>% select(dialect, speaker, ser_prop, est_prop)
 
     ## Warning: Removed 1 rows containing non-finite values (stat_boxplot).
 
-![](Coding_challenge_1_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+![](Coding_challenge_1_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+
+It looks like there is less overlap between each dialect\! Let’s compare
+these two measures side-by-side. To put them on the same scale, we will
+compare (i) the OVERALL proportions of ser and estar, out of all verb
+occurences; and (ii) the RELATIVE proportion of estar, out of all
+ser+estar occurrences. The graph below suggests that yes, indeed,
+looking at the tradeoff between ser/estar gets us greater separation
+between
+dialects.
+
+``` r
+ratios$estar_over_ser <- ratios$est_prop / (ratios$ser_prop + ratios$est_prop)
+
+#melt the data for plotting 
+melt_ratios <- melt(ratios, id.vars=c("dialect", "speaker"))
+#fix the column names and levels
+names(melt_ratios) <- revalue(names(melt_ratios), c("variable"="proportion_type", "value"="proportion"))
+levels(melt_ratios$proportion_type) <- c("ser/all verbs","estar/all verbs", "estar/ser & estar")
+
+#Plot the absolute and relative proportions of estar and ser
+  ggplot(melt_ratios, aes(x=dialect, y=proportion, color = dialect)) +
+    facet_grid(.~proportion_type) +
+    geom_boxplot() +
+    #ylim(0, 1.8) +
+    theme_bw() +
+    theme(legend.position="top", axis.text.x=element_blank()) +
+    ggtitle("Absolute versus relative proportions of 'estar' and 'ser'\n across 6 dialects of Spanish") +
+    ylab("")
+```
+
+![](Coding_challenge_1_files/figure-gfm/propvsratio-1.png)<!-- -->
 
 ``` r
   #uncomment the following line to save this figure as a pdf
-  ggsave("Asset_2-ratio_estar_ser.pdf", dpi=900, dev='pdf', height=6, width=6, units="in")
+  #ggsave("Asset_2-ratio_estar_ser.pdf", dpi=900, dev='pdf', height=6, width=6, units="in")
 ```
-
-    ## Warning: Removed 1 rows containing non-finite values (stat_boxplot).
-
-Now there less overlap between each dialect\!
 
 The final step is to try this with other similar-meaning words. However,
 since most words are much, much less frequent than these two verbs, we
@@ -843,10 +733,16 @@ ratio of word pairs.
   #fix the column names and levels
   names(melt_wordpairs) <- revalue(names(melt_wordpairs), c("variable"="verb_pair", "value"="ratio"))
   levels(melt_wordpairs$verb_pair) <- c("coche:carro - car","conducir:manejar - drive", "decir:hablar - say", "beber:tomar - drink", "chico:nino - kid")
-  #Plot. Looks good as portrait 6"h x 7"w
+```
+
+Now we can plot each of these ratios on the same scale \[Note: I limit
+the scale, which eliminates 6
+outliers\]:
+
+``` r
   wordratios.plot <- ggplot(melt_wordpairs, aes(x=dialect, y=ratio, color = dialect)) +
     facet_grid(.~verb_pair) +
-    ylim(0,5) +
+    ylim(0,23) +
     geom_boxplot() +
     theme_bw() +
     theme(legend.position="top", axis.text.x=element_blank()) +
@@ -861,8 +757,7 @@ The plot below shows us the following:
     ratio than the other two.
 2)  Spain is the only dialect with a conducir:manejar ratio over 1.
 3)  Paraguay has a particularly high ratio of decir: hablar
-4)  coche and carro are not frequent enough to be useful in this
-    dataset
+4)  coche and carro are not frequent enough to be useful in this dataset
 
 <!-- end list -->
 
@@ -870,23 +765,19 @@ The plot below shows us the following:
 wordratios.plot
 ```
 
-    ## Warning: Removed 61 rows containing non-finite values (stat_boxplot).
-
-![](Coding_challenge_1_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+![](Coding_challenge_1_files/figure-gfm/wordratios.plot-1.png)<!-- -->
 
 ``` r
   #uncomment the following line to save this figure as a pdf
   ggsave("Asset_3-ratio_word_pairs.pdf", dpi=900, dev='pdf', height=6, width=7, units="in")
 ```
 
-    ## Warning: Removed 61 rows containing non-finite values (stat_boxplot).
-
 General conclusions: In sum, the exploratory analysis shows that: 1)
-rates of individual pronoun subjects are a promising type of feature to
-use when distinguishing dialects. 2) in some cases, testing the ratio of
-similar-meaning words may provide additional insight, over and above
-simply using the proportion of words.
+Rates of individual pronoun subjects are a promising type of feature to
+use when distinguishing dialects. 2) In some cases, testing the ratio of
+similar-meaning words may provide additional insight, over and above the
+overall rates of individual words.
 
 Future steps will involve a full-blown exploration of all words that may
 be distinctive for each dialect, plus a greater set of word PAIRS whose
-proportions may vary across dialects as well.
+proportions may vary across dialects.
