@@ -406,7 +406,7 @@ The Figure below displays our results:
 ```{r}
   pro.plot
 #uncomment the following line to save this figure as a pdf
-ggsave("Asset_1-prop_subject_pronouns.pdf", dpi=900, dev='pdf', height=5, width=9, units="in")
+#ggsave("Asset_1-prop_subject_pronouns.pdf", dpi=900, dev='pdf', height=5, width=9, units="in")
 
 ```
 
@@ -478,7 +478,7 @@ ratios <- dialect_verbs %>% select(dialect, speaker, ser_prop, est_prop)
     ylab("")
   
   #uncomment the following line to save this figure as a pdf
-  ggsave("Asset_2-ratio_estar_ser.pdf", dpi=900, dev='pdf', height=6, width=6, units="in")
+  #ggsave("Asset_2-ratio_estar_ser.pdf", dpi=900, dev='pdf', height=6, width=6, units="in")
   
 ```
 
@@ -599,7 +599,7 @@ The plot below shows us the following:
 ```{r}
 wordratios.plot
   #uncomment the following line to save this figure as a pdf
-  ggsave("Asset_3-ratio_word_pairs.pdf", dpi=900, dev='pdf', height=6, width=7, units="in")
+  #ggsave("Asset_3-ratio_word_pairs.pdf", dpi=900, dev='pdf', height=6, width=7, units="in")
 ```
 
 General conclusions: In sum, the exploratory analysis shows that:
