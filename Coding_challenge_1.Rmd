@@ -17,7 +17,7 @@ future goals: use these insights to produce a classifier capable of identifying 
 
 potential application: allow an ASR (Alexa, Siri, etc.) to detect when a different dialect is being spoken than expected, so it can prompt the user to change settings. (For example, when set to Mexican Spanish, the ASR should be able to detect the use of Spanish with non-Mexican features).
 
-```{r}
+```{r libraries, echo=T, warning=FALSE, results='hide'}
 ####################
 #libraries
 ####################
@@ -35,15 +35,15 @@ library(readr)
 Data: The data for this exploratory analysis comes from transcripts of free-form parent-child interactions in 4 different dialects, compiled from 6 corpora available at https://childes.talkbank.org/access/Spanish/ and 2 private corpora (anticipated release: Sept. 2020). Each utterance has been tagged for speaker and the words have been passed through the part-of-speech tagger designed for Spanish by Brian MacWhinney and described here: https://talkbank.org/manuals/MOR.pdf . An important feature of this tagger is that it identifies verb stems (ex. esta-) so that different inflections of the same verb (ex. estoy, ‘(I) am’, estás ‘(you) are’, etc.) can be easily grouped together. I have used the accompanying free software called CLAN (http://dali.talkbank.org/clan/) to put the data into csv format, with one line per utterance. 
 
 The code below cleans the data and extract the following variables: 
-file - name of the transcript
-line - each utterance appears on a separate line
-participant - what kind of person is speaking (parent, investigator, etc.) For now, we only include adults; no children.
-speaker - the speaker's unique ID
-environment - the utterance: all the words that were said and the part-of-speech tagger.
-dyad - 
-dialect - For now, this includes Mexican, Argentinian, Spain, and Paraguayan Spanish.
+- file: name of the transcript
+- line: each utterance appears on a separate line
+- participant: what kind of person is speaking (parent, investigator, etc.) For now, we only include adults; no children.
+- speaker: the speaker's unique ID
+- environment: the utterance, including all the words that were said and the part-of-speech tags
+- dyad: this variable is used to identify some mother-child pairs
+- dialect: For now, this includes Mexican, Argentinian, Spain, and Paraguayan Spanish.
 
-```{r}
+```{r dataprep, echo=T, message=FALSE, warning=FALSE, results='hide'}
 ################
 #Data prep - Schmitt Miller corpus (Mexico City - 24 children, approx 60 adults )
 ###############
@@ -302,7 +302,7 @@ ArgS2$dialect <- as.factor("Argentinian")
 
 After removing speakers with fewer than 100 utterances, the total size of this dataset is 198,256 utterances, or 36.6 MB.
 
-```{r}
+```{r dataset}
 ################
 #primary dataset
 ################
