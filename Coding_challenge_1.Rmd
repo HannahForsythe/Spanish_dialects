@@ -1,6 +1,6 @@
 ---
 title: "Project proposal for Data Incubator"
-output: Coding_challenge_1.nd.html
+output: rmarkdown::github_document
 ---
 
 available at: https://github.com/HannahForsythe/span_dialects
