@@ -1,23 +1,32 @@
 Project proposal for Data Incubator
 ================
 
-available at: <https://github.com/HannahForsythe/span_dialects> author:
-Hannah Forsythe date: 13-April-2020 description: Exploratory analysis of
-dialectal differences across Spanish. Figure 1 explores the utility of
-two potential features for characterizing dialectal differences: (i)
-overall rates subject pronoun use, and (ii) rates of different types of
-subject pronouns Figure 2 explores the utility of a using the ratio of
-similar meaning verbs ‘estar’ and ‘ser’ (‘be’) to distinguish between
-dialects. Figure 3 extends this to other pairs of similar meaning words.
+available at: <https://github.com/HannahForsythe/span_dialects>
+
+author: Hannah Forsythe
+
+date: 13-April-2020
+
+description: Exploratory analysis of dialectal differences across
+Spanish. Figure 1 explores the utility of two potential features for
+characterizing dialectal differences: (i) overall rates subject pronoun
+use, and (ii) rates of different types of subject pronouns
+
+Figures 2-4 explore the utility of a using the frequency of verbs
+‘estar’ and ‘ser’ (‘be’) to distinguish between dialects, or the
+RATIO between them.
+
+Figure 5 looks at the ratios between other pairs of similar-meaning
+words.
 
 future goals: use these insights to produce a classifier capable of
 identifying a dialect, given an utterance of reasonable length.
 
 potential application: allow an ASR (Alexa, Siri, etc.) to detect when a
 different dialect is being spoken than expected, so it can prompt the
-user to change settings. (For example, when set to Mexican Spanish, the
-ASR should be able to detect the use of Spanish with non-Mexican
-features).
+user to change settings. For example, when set to Mexican Spanish, the
+ASR should be able to detect when someone is speaking a variety of
+Spanish with non-Mexican features.
 
 ``` r
 ####################
@@ -89,7 +98,7 @@ library(reshape)
 library(readr)
 ```
 
-Data: The data for this exploratory analysis comes from transcripts of
+data: The data for this exploratory analysis comes from transcripts of
 free-form parent-child interactions in 4 different dialects, compiled
 from 6 corpora available at
 <https://childes.talkbank.org/access/Spanish/> and 2 private corpora
@@ -103,7 +112,7 @@ etc.) can be easily grouped together. I have used the accompanying free
 software called CLAN (<http://dali.talkbank.org/clan/>) to put the data
 into csv format, with one line per utterance.
 
-The code below cleans the data and extract the following variables: a)
+The code below cleans the data and extracts the following variables: a)
 file: name of the transcript b) line: each utterance appears on a
 separate line c) participant: what kind of person is speaking (parent,
 investigator, etc.) For now, we only include adults; no children. d)
@@ -396,14 +405,15 @@ object_size(df)
     ## 36.6 MB
 
 The first feature we explore is the proportion of verbs with pronouns as
-subjects. This rate varies systematically across different dialects,
-with higher rates in contact dialects (ex. Paraguayan Spanish) and in
-the Caribbean (not represented in our sample). We will also break these
-rates down by individual pronoun, since some dialects use differnt
-pronouns (ex. Paraguayans & Argentinians use ‘vos’ while Mexicans &
-Spaniards use ‘tú’) and some dialects use the same pronouns to different
-extents (ex. Spaniards are very informal so they probably never use
-‘usted’).
+subjects. According to sociolinguistic research, this rate varies
+systematically across different dialects, with higher rates in contact
+dialects (ex. Paraguayan Spanish) and in the Caribbean (not represented
+in our sample), so maybe we can use this to distinguish dialects from
+each other. We will also break these rates down by individual pronoun,
+since some dialects use differnt pronouns (ex. Paraguayans &
+Argentinians use ‘vos’ while Mexicans & Spaniards use ‘tú’) and some
+dialects use the same pronouns to different extents (ex. Spaniards are
+very informal so they might not use the formal pronoun ‘usted’ much).
 
 ``` r
 ################
@@ -482,7 +492,7 @@ extents (ex. Spaniards are very informal so they probably never use
     geom_boxplot() +
     theme_bw() +
     theme(legend.position="top", axis.text.x=element_blank()) +
-    ggtitle("Estimated proportion of different types of subject pronouns across dialects of Spanish") +
+    ggtitle("Estimated proportion of different types of subject pronouns \nacross dialects of Spanish") +
     ylab("")
 ```
 
@@ -496,7 +506,7 @@ The Figure below displays our results:
 
 ``` r
 #uncomment the following line to save this figure as a pdf
-#ggsave("Asset_1-prop_subject_pronouns.pdf", dpi=900, dev='pdf', height=5, width=9, units="in")
+ggsave("Asset_1-prop_subject_pronouns.pdf", dpi=900, dev='pdf', height=5, width=9, units="in")
 ```
 
 What we learn from this figure:
@@ -512,10 +522,10 @@ What we learn from this figure:
     rare).
 3)  More interestingly, the remaining pronouns allow us to get a finer
     distinction WITHIN these two groups (Argentinians/Paraugyans and
-    Mexicans/Spaniards). For the first par, Argentinians use vos more
-    often on average than Paraguayans, and vice-versa for yo and el. For
-    the second pair, Mexicans can be distinguished from Spaniards
-    because they simply use more pronouns overall.
+    Mexicans/Spaniards). First, Argentinians use ‘vos’ more often on
+    average than Paraguayans, and vice-versa for ‘yo’ and ‘él/ella’.
+    Second, Mexicans can be distinguished from Spaniards because they
+    simply use more pronouns overall.
 
 -----
 
@@ -527,10 +537,10 @@ An important feature of this tagger is that it identifies verb stems
 estoy, ‘(I) am’, estás ‘(you) are’, etc.) can be easily grouped
 together.
 
-We begin with the highly frequent verbs ser and estar (both meaning ‘to
-be’). First, let’s compare how frequent these verbs are across dialects
-by measuring the each speaker’s average proportion of ser and estar out
-of all verb stems.
+We begin with the highly frequent verbs ‘ser’ and ‘estar’ (both meaning
+‘to be’). First, let’s compare how frequent these verbs are across
+dialects by measuring the each speaker’s average proportion of ‘ser’ and
+‘estar’ out of all verb occurrences.
 
 ``` r
 #Define verb tags to search for in each line.
@@ -601,13 +611,13 @@ ratios <- dialect_verbs %>% select(dialect, speaker, ser_prop, est_prop)
 
 ![](Coding_challenge_1_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
 
-It looks like there is less overlap between each dialect\! Let’s compare
-these two measures side-by-side. To put them on the same scale, we will
-compare (i) the OVERALL proportions of ser and estar, out of all verb
-occurences; and (ii) the RELATIVE proportion of estar, out of all
-ser+estar occurrences. The graph below suggests that yes, indeed,
-looking at the tradeoff between ser/estar gets us greater separation
-between
+It looks like there is even less overlap between dialects\! Let’s check
+this by comparing these two measures side-by-side. To put them on the
+same scale, we will compare (i) the OVERALL proportions of ‘ser’ and
+‘estar’, out of all verb occurences; and (ii) the RELATIVE proportion
+of ‘estar’, out of all ‘ser’ & ‘estar’ occurrences. The graph below
+suggests that yes, indeed, looking at the relative ‘estar/ser’ tradeoff
+gets us greater separation between
 dialects.
 
 ``` r
@@ -626,7 +636,7 @@ levels(melt_ratios$proportion_type) <- c("ser/all verbs","estar/all verbs", "est
     #ylim(0, 1.8) +
     theme_bw() +
     theme(legend.position="top", axis.text.x=element_blank()) +
-    ggtitle("Absolute versus relative proportions of 'estar' and 'ser'\n across 6 dialects of Spanish") +
+    ggtitle("Absolute versus relative proportions of 'estar' and 'ser'\n across dialects of Spanish") +
     ylab("")
 ```
 
@@ -634,14 +644,14 @@ levels(melt_ratios$proportion_type) <- c("ser/all verbs","estar/all verbs", "est
 
 ``` r
   #uncomment the following line to save this figure as a pdf
-  #ggsave("Asset_2-ratio_estar_ser.pdf", dpi=900, dev='pdf', height=6, width=6, units="in")
+  ggsave("Asset_2-ratio_estar_ser.pdf", dpi=900, dev='pdf', height=6, width=6, units="in")
 ```
 
-The final step is to try this with other similar-meaning words. However,
-since most words are much, much less frequent than these two verbs, we
-have to be careful not to divide by zero. In the following code block, I
-add a small amount to each word’s proportion before calculating the
-ratio of word pairs.
+The final step (for now) is to try this technique with other
+similar-meaning words. However, since most words are much, much less
+frequent than these two verbs, we have to be careful not to divide by
+zero. In the following code block, I add a small amount to each word’s
+proportion before calculating the ratio of any two word proportions.
 
 ``` r
 #Define verb tags to search for in each line.
@@ -708,7 +718,7 @@ ratio of word pairs.
   #calculate ratio of conducir to manejar. but first, smooth out zeros by adding a tiny amount
   ratios$maneja_prop <- (dialect_pairs$maneja_prop)+.001
   ratios$conduci_prop <- (dialect_pairs$conduci_prop)+.001
-  ratios$conduci_over_maneja <- ratios$conduci_prop / ratios$maneja_prop
+  ratios$maneja_over_conduci <- ratios$maneja_prop / ratios$conduci_prop
 
   #calculate ratio of hablar to decir but first, smooth out zeros by adding a tiny amount
   ratios$habla_prop <- (dialect_pairs$habla_prop)+.001
@@ -718,7 +728,7 @@ ratio of word pairs.
   #calculate ratio of tomar to beber but first, smooth out zeros by adding a tiny amount
   ratios$toma_prop <- (dialect_pairs$toma_prop)+.001
   ratios$bebe_prop <- (dialect_pairs$bebe_prop)+.001
-  ratios$bebe_over_toma <- ratios$bebe_prop / ratios$toma_prop
+  ratios$toma_over_bebe <- ratios$toma_prop / ratios$bebe_prop
   
   #calculate ratio of niño/a to chico/a but first, smooth out zeros by adding a tiny amount
   ratios$nino_prop <- (dialect_pairs$nino_prop)+.001
@@ -727,22 +737,22 @@ ratio of word pairs.
   
   #For each speaker and dialect, plot the ratio of each similar-meaning word pair
   #drop unnecessary columns
-  wordpairs <- ratios %>% select(dialect, speaker, coche_over_carro, conduci_over_maneja, deci_over_habla, bebe_over_toma, chico_over_nino)
+  wordpairs <- ratios %>% select(dialect, speaker, coche_over_carro, maneja_over_conduci, deci_over_habla, toma_over_bebe, chico_over_nino)
   #melt the data for plotting 
   melt_wordpairs <- melt(wordpairs, id.vars=c("dialect", "speaker"))
   #fix the column names and levels
   names(melt_wordpairs) <- revalue(names(melt_wordpairs), c("variable"="verb_pair", "value"="ratio"))
-  levels(melt_wordpairs$verb_pair) <- c("coche:carro - car","conducir:manejar - drive", "decir:hablar - say", "beber:tomar - drink", "chico:nino - kid")
+  levels(melt_wordpairs$verb_pair) <- c("coche:carro - car","manejar:conducir - drive", "decir:hablar - say", "tomar:beber - drink", "chico:nino - kid")
 ```
 
 Now we can plot each of these ratios on the same scale \[Note: I limit
-the scale, which eliminates 6
+the y-axis, which eliminates 8
 outliers\]:
 
 ``` r
   wordratios.plot <- ggplot(melt_wordpairs, aes(x=dialect, y=ratio, color = dialect)) +
     facet_grid(.~verb_pair) +
-    ylim(0,23) +
+    ylim(0,30) +
     geom_boxplot() +
     theme_bw() +
     theme(legend.position="top", axis.text.x=element_blank()) +
@@ -750,14 +760,13 @@ outliers\]:
     ylab("")
 ```
 
-The plot below shows us the following:
+The plot below shows us the following (left to right):
 
-1)  The pair chico:nino clearly distinguishes Argentinian/Paraguayan
-    from the other two. They also have a SLIGHTLY higher beber:tomar
-    ratio than the other two.
-2)  Spain is the only dialect with a conducir:manejar ratio over 1.
-3)  Paraguay has a particularly high ratio of decir: hablar
-4)  coche and carro are not frequent enough to be useful in this dataset
+1)  coche and carro are not frequent enough to be useful in this dataset
+2)  Spain is the only dialect with a conducir:manejar ratio under 1.
+3)  The ratio decir: hablar clearly separates Paraguayan from
+    Argentinian Spanish 4-5) The pairs tomar:beber and chico:nino
+    distinguish Argentinian/Paraguayan dialects from Mexcian/Spain.
 
 <!-- end list -->
 
@@ -773,11 +782,14 @@ wordratios.plot
 ```
 
 General conclusions: In sum, the exploratory analysis shows that: 1)
-Rates of individual pronoun subjects are a promising type of feature to
-use when distinguishing dialects. 2) In some cases, testing the ratio of
-similar-meaning words may provide additional insight, over and above the
-overall rates of individual words.
+Every dialect can be distinguished from every other dialect along at
+least SOME feature explored here. 2) Rates of individual pronoun
+subjects are a promising and easy-to-implement feature to use when
+distinguishing dialects. 3) In some cases, the ratio of similar-meaning
+word PAIRS may provide additional insight, over and above the overall
+rates of the INDIVIDUAL words.
 
-Future steps will involve a full-blown exploration of all words that may
-be distinctive for each dialect, plus a greater set of word PAIRS whose
-proportions may vary across dialects.
+Before implementing the proposed classifier, I will do a full-blown
+exploration of all words in this dataset to see which ones may be
+distinctive for each dialect, as well as a greater exploration of word
+PAIRS whose proportions may vary across dialects.
